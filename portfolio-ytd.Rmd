@@ -1,0 +1,18 @@
+---
+title: "YTD Portfolio"
+output: html_notebook
+---
+
+```{r include=FALSE}
+
+```
+
+
+# Tweeter Bomb - Chart visualization for Year to Date Portfolio analysis.
+
+### Tweet: Tell interesting data stories!
+
+Go from basic spaghetti slappers...
+
+Visualziation - The Base
+
