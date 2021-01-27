@@ -1,0 +1,60 @@
+---
+title: "R Visual Musings"
+output: html_notebook
+---
+
+Thought Experiment.  What type of visualization is most worthwile to a sales person/sales team for identifying revenue.
+
+
+```{r Library & Data Loading, include=FALSE}
+library(tidyverse)
+library(highcharter)
+library(janitor)
+
+sales <- readRDS(file = "sales_data.rds")
+
+names(sales) <- names(sales) %>% gsub(pattern = "(\\.)+",
+                                    replacement = "_") %>% tolower()
+```
+
+### HighCharter
+```{r}
+rep_by_month <- sales %>%
+    group_by(month_id, rep) %>%
+    summarize(
+        monthly_total = sum(sales)
+    ) # %>%
+    # adorn_totals("row")
+
+
+
+monthly_avg <- rep_by_month %>%
+    group_by(month_id) %>%
+    summarise(
+        monthly_total = mean(monthly_total)
+    ) %>%
+    mutate(
+        rep = "monthly_mean"
+    )
+
+final <- bind_rows(rep_by_month, monthly_avg)
+
+highcharter::highchart() %>%
+    hc_add_series(final,
+                  type = "line",
+                  hcaes(x = month_id, y = monthly_total, group = rep))
+    
+```
+
+```{r}
+highcharter::highchart() %>%
+    hc_add_series(rep_by_month,
+                  type = "line",
+                  hcaes(x = month_id, y = monthly_total, group = rep)) %>%
+    hc_add_series(monthly_avg,
+                  type = "line",
+                  hcaes(x = month_id, y = monthly_total, group = rep))
+```
+
+
+
